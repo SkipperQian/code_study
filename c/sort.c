@@ -1,5 +1,14 @@
 #include <stdio.h>
 
+void exchange(int *a, int *b)
+{
+    int tem;
+
+    tem = *a;
+    *a = *b;
+    *b = tem;
+}
+
 void bubble(int array[], int size)
 {
     int i, j;
