@@ -50,3 +50,29 @@ void sort_select(int array[], int size)
             exchange(&array[key_index], &array[i]);
     }
 }
+
+void sort_quick(int array[], int low, int high)
+{
+    int i, j;
+    int key;
+
+    if (low >= high)
+        return;
+
+    i = low;
+    j = high;
+    key = array[low];
+
+    while(i < j) {
+        while (i < j && array[j] >= key)
+            j--;
+        exchange(&array[i], &array[j]);
+
+        while(i < j && array[i] < key)
+            i++;
+        exchange(&array[i], &array[j]);
+    }
+
+    sort_quick(array, low, j - 1);
+    sort_quick(array, i + 1, high);
+}
