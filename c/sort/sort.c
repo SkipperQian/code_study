@@ -46,33 +46,35 @@ void sort_select(int array[], int size)
             }
         }
 
-        if (i != key_index) 
+        if (i != key_index)
             exchange(&array[key_index], &array[i]);
     }
 }
 
 void sort_quick(int array[], int low, int high)
 {
-    int i, j;
+    int i = low, j = high;
     int key;
 
     if (low >= high)
         return;
 
-    i = low;
-    j = high;
-    key = array[low];
-
+    key = array[i];
     while(i < j) {
         while (i < j && array[j] >= key)
             j--;
-        exchange(&array[i], &array[j]);
-
+        if (i < j) {
+            array[i] = array[j];
+            i++;
+        }
         while(i < j && array[i] < key)
             i++;
-        exchange(&array[i], &array[j]);
+        if (i < j) {
+            array[j] = array[i];
+            j--;
+        }
     }
-
+    array[i] = key;
     sort_quick(array, low, j - 1);
     sort_quick(array, i + 1, high);
 }
