@@ -1,3 +1,9 @@
+/*
+ * Design an algorithm and write code to remove the duplicate characters in a string
+ * without using any additional buffer. NOTE: One or two additional variables are fine.
+ * An extra copy of the array is not.
+*/
+
 #include <stdio.h>
 #include <string.h>
 
@@ -27,7 +33,7 @@ int main(int argc, char *argv[])
 {
     char str1[20] = "aaabbcccc";
     char str2[20] = " hello world";
-    
+
     rm_duplicate_ch(str1);
     printf("str1: %s\n", str1);
 
