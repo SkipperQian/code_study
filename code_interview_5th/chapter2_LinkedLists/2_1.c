@@ -34,8 +34,8 @@ void remove_duplicate_node(struct list_node *list)
     }
 }
 
- int main(int argc, char *argv[])
- {
+int main(int argc, char *argv[])
+{
     int array[10] = {1, 1, 1, 1, 1, 5, 1, 1, 1, 1};
     struct list_node *list_head = NULL;
 
@@ -45,5 +45,7 @@ void remove_duplicate_node(struct list_node *list)
     remove_duplicate_node(list_head);
     display_list(list_head);
 
+    destory_list(list_head);
+
     return 0;
- }
+}

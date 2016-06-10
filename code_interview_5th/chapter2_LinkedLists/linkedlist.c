@@ -11,6 +11,9 @@ struct list_node * creat_list(int num[], int size)
     for (i = 0; i < size; i++) {
         struct list_node *newnode = NULL;
         newnode = (struct list_node *)malloc(sizeof(struct list_node));
+        if (newnode == NULL) {
+            destory_list(list);
+        }
 
         newnode->item = num[i];
         newnode->next = NULL;
@@ -33,5 +36,16 @@ void display_list(struct list_node *node)
         node = node->next;
         if (node == NULL)
             printf("\n");
+    }
+}
+
+void destory_list(struct list_node *head)
+{
+    struct list_node *p = NULL;
+
+    while (head) {
+        p = head;
+        head = head->next;
+        free(p);
     }
 }

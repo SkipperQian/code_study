@@ -9,5 +9,6 @@ struct list_node
 
 struct list_node * creat_list(int num[], int size);
 void display_list(struct list_node *node);
+void destory_list(struct list_node *head);
 
 #endif
