@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <errno.h>
 #include <linux/genetlink.h>
+#include "my_genl_attr.h"
 
 int send_genl_msg(int fd, int id, unsigned int pid, unsigned char cmd,
 		  unsigned char ver, int type, void *data, size_t len)
@@ -33,7 +34,7 @@ int send_genl_msg(int fd, int id, unsigned int pid, unsigned char cmd,
 	nlh->nlmsg_len = NLMSG_SPACE(GENL_HDRLEN);
 	nlh->nlmsg_type = id;
 	nlh->nlmsg_flags =  NLM_F_REQUEST;
-	nlh->nlmsg_pid = pid; /*getpid();*/
+	nlh->nlmsg_pid = getpid(); /*getpid();*/
 	nlh->nlmsg_seq = 0;
 
 	gnlh = (struct genlmsghdr *)NLMSG_DATA(nlh);
@@ -79,6 +80,43 @@ int send_genl_msg(int fd, int id, unsigned int pid, unsigned char cmd,
 	free(buf);
 
 	return 0;
+}
+
+int recv_genl_msg(int family_id, int fd, void *data)
+{
+	ssize_t recv_bytes = 0;
+	unsigned char *buf;
+	struct nlmsghdr *nlh;
+	struct nlattr *nla;
+	int ret;
+
+	buf = (unsigned char *)malloc(256);
+
+	recv_bytes = recv(fd, buf, 256, 0);
+	if (recv_bytes < 0) {
+		printf("%s: recv failed\n", __func__);
+		free(buf);
+		return -1;
+	}
+	printf("%s: recv len is %ld\n", __func__, recv_bytes);
+
+	nlh = (struct nlmsghdr *)buf;
+	if (nlh->nlmsg_type == NLMSG_ERROR || !NLMSG_OK(nlh, recv_bytes)) {
+		printf("%s: recv len %ld is error\n", __func__, recv_bytes);
+		free(buf);
+		return -1;
+	}
+	if (nlh->nlmsg_type == family_id && family_id != 0) {
+		nla = (struct nlattr *)(NLMSG_DATA(nlh) + GENL_HDRLEN);
+		printf("%s: tlv type:%u, len:%u\n", __func__, nla->nla_type, nla->nla_len);
+		strcpy(data, (char *)nla + NLA_HDRLEN);
+		ret = 0;
+	} else {
+		ret = -1;
+	}
+
+	free(buf);
+	return ret;
 }
 
 int get_family_id(int fd, char *name)
@@ -151,11 +189,11 @@ int get_family_id(int fd, char *name)
 
 int main(int argc, char *argv[])
 {
-	struct sockaddr_nl saddr, daddr;
-	struct nlmsghdr *nlh = NULL;
+	struct sockaddr_nl saddr;
 	int sd;
 	int ret;
 	int family_id;
+	char str[256] = {0};
 
 	sd = socket(AF_NETLINK, SOCK_RAW, NETLINK_GENERIC);
 	if (sd == -1) {
@@ -180,6 +218,18 @@ int main(int argc, char *argv[])
 	family_id = get_family_id(sd, "my_genl");
 	printf("family id=%d\n", family_id);
 
+
+	sprintf(str, "this is user space");
+	if (send_genl_msg(sd, family_id, getpid(), MY_CMD_ECHO, 1, MY_ATTR_MSG, str, strlen(str) + 1) != 0) {
+		close(sd);
+		return -1;
+	}
+	memset(str, 0, 256);
+	if (recv_genl_msg(family_id, sd, str) == 0) {
+		printf("get echo: %s\n", str);
+	} else {
+		printf("nothing to get\n");
+	}
 
 	close(sd);
 	return 0;

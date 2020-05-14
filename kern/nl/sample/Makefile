@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -g -O2
+CFLAGS += -I../include
 
 SAMPLE = nl_echo genl_echo
 
