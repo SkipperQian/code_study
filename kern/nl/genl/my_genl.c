@@ -12,11 +12,8 @@ static const struct genl_multicast_group my_genl_mcgrps[] = {
 };
 
 static const struct nla_policy my_genl_policy[MY_ATTR_MAX + 1] = {
-	[MY_ATTR_MAX] = {.type = NLA_NUL_STRING},
+	[MY_ATTR_MSG] = {.type = NLA_NUL_STRING},
 };
-
-
-
 
 static int my_genl_fill_hdr(u8 cmd, pid_t pid, struct sk_buff *skb)
 {
@@ -43,8 +40,7 @@ static int my_genl_send_msg_to_user(u8 *data, size_t len, pid_t pid)
 	skb = genlmsg_new(size, GFP_KERNEL);
 	if (skb == NULL) {
 		pr_err("[%s] new sk_buff failed\n", __func__);
-		ret =  -ENOMEM;
-		goto free_mem;
+		return -ENOMEM;
 	}
 
 	ret = my_genl_fill_hdr(MY_CMD_ECHO, pid, skb);
@@ -133,6 +129,10 @@ static int __init my_genl_init(void)
 						   my_genl_mcgrps);
 #endif
 	ret = genl_register_family(&my_genl_family);
+
+	pr_info("[%s] family id:%d\n", __func__, my_genl_family.id);
+
+
 	if (ret)
 		return ret;
 
