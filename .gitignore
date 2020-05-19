@@ -1,0 +1,16 @@
+.vscode/settings.json
+kern/nl/genl/.cache.mk
+kern/nl/genl/.my_genl.ko.cmd
+kern/nl/genl/.my_genl.mod.o.cmd
+kern/nl/genl/.my_genl.o.cmd
+kern/nl/genl/Module.symvers
+kern/nl/genl/modules.order
+kern/nl/genl/my_genl.ko
+kern/nl/genl/my_genl.mod.c
+kern/nl/genl/my_genl.mod.o
+kern/nl/genl/my_genl.o
+kern/nl/genl/.tmp_versions/my_genl.mod
+kern/nl/sample/genl_echo
+kern/nl/sample/nl_echo
+net/tftp/tftp_client
+net/tftp/tftp_server
