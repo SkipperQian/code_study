@@ -1,3 +1,5 @@
+#include "tftp.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -8,11 +10,19 @@
 
 int main(int argc, char *argv[])
 {
+	Tftp_CreateServ();
+	return 0;
+}
+
+
+#if 0
+int main(int argc, char *argv[])
+{
 	int sd;
 	int ret;
 	struct sockaddr_in saddr, caddr;
 	socklen_t len;
-	ssize_t recv_bytes = 0, sent_bytes = 0;	
+	ssize_t recv_bytes = 0, sent_bytes = 0;
 	char buf[256] = {0};
 
 	sd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -52,3 +62,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+#endif
