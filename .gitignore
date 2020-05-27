@@ -14,3 +14,4 @@ kern/nl/sample/genl_echo
 kern/nl/sample/nl_echo
 net/tftp/tftp_client
 net/tftp/tftp_server
+.vscode/c_cpp_properties.json
