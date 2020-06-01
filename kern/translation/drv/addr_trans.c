@@ -97,6 +97,7 @@ static int __init my_addr_trans_init(void)
 
 	test_addr = (unsigned long)kmalloc(sizeof(unsigned long), GFP_KERNEL);
 	pr_info("[%s] kmalloc: virt addr:0x%lx %pK\n", __func__, test_addr, (void *)test_addr);
+	*((unsigned long *)test_addr)  = 1;
 	my_virt_to_phy(test_addr);
 
 	v_addr = (unsigned long)vmalloc(100);

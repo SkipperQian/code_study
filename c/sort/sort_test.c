@@ -1,6 +1,17 @@
 #include <stdio.h>
 #include "sort.h"
 
+
+
+
+
+
+
+
+
+
+
+
 int main(int argc, char *argv[])
 {
     int array1[10] = {7, 4, 1, 2, 5, 8, 9, 6, 3, 0};
